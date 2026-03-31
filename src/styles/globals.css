@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+/* Base resets */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: auto; /* Lenis handles smooth scroll */
+}
+
+/* Lenis smooth scroll */
+html.lenis, html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: #ffffff;
+  color: #1a1a1a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  text-decoration: none;
+}
+
+
+@keyframes burgerDropSmooth {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-220px) scale(0.92);
+  }
+  45% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(18px) scale(1.02);
+  }
+  65% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-8px) scale(0.995);
+  }
+  82% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(4px) scale(1.002);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
