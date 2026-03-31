@@ -49,9 +49,11 @@ const showcaseCombos = [
     tagline: 'Golden. Crispy. Irresistible.',
     desc: 'Every bite of the Crunch Combo is packed with crispy coated pieces, golden fries, and a chilled drink — a perfectly balanced everyday indulgence.',
     highlights: ['Crispy Chicken Bites', 'Golden Fries', 'Dipping Sauce', 'Chilled Drink'],
-    image: '/compos/CrunchCombo.jpg',
+    image: '/compos/fish_crunch.png',
     blob: '#f4a62a',
     accent: '#b07500',
+    ringOuter: '#f4a62a',
+    ringInner: '#d97706',
   },
   {
     name: 'Fish &\nChips',
@@ -59,9 +61,11 @@ const showcaseCombos = [
     tagline: 'Light. Fresh. Satisfying.',
     desc: 'A timeless classic reimagined — tender golden fish fillets with perfectly crisp chips and a side of tartar sauce. The sea never tasted this good.',
     highlights: ['Fish Fillet', 'Crispy Chips', 'Tartar Sauce', 'Lemon Wedge'],
-    image: '/compos/fishchips.jpg',
+    image: '/compos/oceanChips.png',
     blob: '#d4a843',
     accent: '#7a5a10',
+    ringOuter: '#d1b66f',
+    ringInner: '#8a6a24',
   },
   {
     name: 'Party\nBox',
@@ -72,6 +76,8 @@ const showcaseCombos = [
     image: '/compos/partybox.jpeg',
     blob: '#e07b3a',
     accent: '#8a3a10',
+    ringOuter: '#e07b3a',
+    ringInner: '#c34b1a',
   },
   {
     name: 'Prawn\nCombo',
@@ -79,9 +85,11 @@ const showcaseCombos = [
     tagline: 'Bold. Juicy. Premium.',
     desc: 'The Prawn Combo brings the ocean to your table — plump, seasoned prawns with crispy sides and a premium presentation that looks as good as it tastes.',
     highlights: ['Seasoned Prawns', 'Crispy Sides', 'Signature Sauce', 'Premium Plating'],
-    image: '/compos/prawn.jpg',
+    image: '/compos/prawnCompo.png',
     blob: '#e8845a',
     accent: '#9a3820',
+    ringOuter: '#f28b74',
+    ringInner: '#c7513a',
   },
 ];
 
@@ -153,21 +161,22 @@ const ScrollShowcase = () => {
   }, [scrollYProgress]);
 
   const combo = showcaseCombos[active];
-  const orbitRadius = 35;
-  const circleLeft = '0%';
-  const orbitDepth = orbitRadius * 0.92;
+  // Round animatic behind the food image
+  const orbitRadius = 32;           // smaller rings
+  const circleLeft = '-4%';         // shift left so the image sits toward the right edge of the rings
+  const orbitDepth = orbitRadius * 0.22;
 
   // Circle rotates on scroll
   const rotation = useTransform(scrollYProgress, [0, 1], [0, 360]);
   const reverseRotation = useTransform(scrollYProgress, [0, 1], [0, -220]);
-  const orbitAngle = useTransform(scrollYProgress, [0, 1], [-90, 90]);
+  const orbitAngle = useTransform(scrollYProgress, [0, 1], [-20, 20]);
   const imageTilt = useTransform(scrollYProgress, [0, 0.5, 1], [-12, 0, 12]);
   const imageScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.94, 1.02, 0.95]);
 
-  // Image orbits the oval: starts at top (-90°) clockwise to 270° (full lap)
-  // Oval semi-axes: a=32vh (horizontal), b=22vh (vertical) — matches the ring dimensions
   const orbitX = useTransform(orbitAngle, (a) => (window.innerHeight / 100) * orbitRadius * Math.cos((a * Math.PI) / 180));
   const orbitY = useTransform(orbitAngle, (a) => (window.innerHeight / 100) * orbitDepth * Math.sin((a * Math.PI) / 180));
+
+  // Each combo: image moves from start (black mark) to end (red mark) independently
 
   return (
     <div ref={containerRef} style={{ height: `${showcaseCombos.length * 100}vh`, marginTop: '80px', position: 'relative' }}>
@@ -178,7 +187,7 @@ const ScrollShowcase = () => {
         height: 'calc(100vh - 56px)',
         borderRadius: '28px',
         overflow: 'hidden',
-        background: '#eeece8',
+        background: `linear-gradient(160deg, ${(combo as any).ringOuter ?? combo.blob}12 0%, #fffaf4 45%, ${(combo as any).ringInner ?? combo.accent}10 100%)`,
         boxShadow: '0 24px 70px rgba(0,0,0,0.10)',
       }}>
 
@@ -238,148 +247,125 @@ const ScrollShowcase = () => {
               key={i}
               animate={{ height: active === i ? 28 : 7, backgroundColor: active === i ? combo.blob : 'rgba(0,0,0,0.18)' }}
               transition={{ duration: 0.35 }}
-              style={{ width: 4, borderRadius: 99 }}
+              style={{ width: 8, borderRadius: 99 }}
             />
           ))}
         </div>
 
-        {/* ── Animated circle stack ── */}
+        {/* ── Animated circle stack (pastel double rings + bubbles) ── */}
         <motion.div
-          animate={{
-            scale: [1, 1.08, 1],
-            opacity: [0.22, 0.34, 0.22],
-          }}
-          transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
+          animate={{ scale: [1, 1.02, 1], opacity: [0.5, 0.7, 0.5] }}
+          transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
           style={{
             position: 'absolute',
-            width: `${orbitRadius * 2 + 10}vh`,
-            height: `${orbitRadius * 2 + 10}vh`,
+            width: `${orbitRadius * 2 + 26}vh`,
+            height: `${orbitRadius * 2 + 26}vh`,
             borderRadius: '50%',
             top: '50%',
             left: circleLeft,
             x: '-50%',
             y: '-50%',
+            border: `16px solid ${(combo as any).ringOuter ?? combo.blob}55`, // outer ring keyed to combo
+            boxShadow: `0 0 32px ${(combo as any).ringOuter ?? combo.blob}33`,
             zIndex: 1,
-            background: `radial-gradient(circle, ${combo.blob}10 0%, ${combo.blob}08 38%, transparent 68%)`,
-            filter: 'blur(14px)',
           }}
         />
-
         <motion.div
-          animate={{ opacity: [0.12, 0.22, 0.12] }}
-          transition={{ duration: 3.4, repeat: Infinity, ease: 'easeInOut' }}
+          animate={{ scale: [1, 0.98, 1], opacity: [0.6, 0.8, 0.6] }}
+          transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
           style={{
             position: 'absolute',
-            width: `${orbitRadius * 2 + 16}vh`,
-            height: `${orbitRadius * 2 + 16}vh`,
+            width: `${orbitRadius * 2 + 8}vh`,
+            height: `${orbitRadius * 2 + 8}vh`,
             borderRadius: '50%',
             top: '50%',
             left: circleLeft,
             x: '-50%',
             y: '-50%',
+            border: `14px solid ${(combo as any).ringInner ?? combo.accent}55`, // inner ring keyed to accent
+            boxShadow: `0 0 26px ${(combo as any).ringInner ?? combo.accent}33`,
             zIndex: 1,
-            border: `3px solid ${combo.blob}14`,
-            boxShadow: `0 0 0 10px ${combo.blob}08`,
           }}
         />
-
+        {/* orbiting highlight */}
         <motion.div
-          animate={{ opacity: [0.14, 0.26, 0.14], scale: [1, 1.03, 1] }}
-          transition={{ duration: 3.8, repeat: Infinity, ease: 'easeInOut' }}
           style={{
             position: 'absolute',
-            width: `${orbitRadius * 2 + 20}vh`,
-            height: `${orbitRadius * 2 + 20}vh`,
+            width: `${orbitRadius * 2 + 26}vh`,
+            height: `${orbitRadius * 2 + 26}vh`,
             borderRadius: '50%',
             top: '50%',
             left: circleLeft,
             x: '-50%',
             y: '-50%',
-            zIndex: 1,
-            border: `1.5px solid ${combo.blob}16`,
-            boxShadow: `inset 0 0 0 1px ${combo.blob}10`,
+            zIndex: 2,
+            pointerEvents: 'none',
           }}
-        />
-
-        <motion.div
-          style={{
+          animate={{ rotate: 360 }}
+          transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
+        >
+          <div style={{
             position: 'absolute',
-            width: `${orbitRadius * 2 + 7}vh`,
-            height: `${orbitRadius * 2 + 7}vh`,
+            top: '-10px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '18px',
+            height: '18px',
             borderRadius: '50%',
-            top: '50%',
-            left: circleLeft,
-            x: '-50%',
-            y: '-50%',
-            rotate: reverseRotation,
-            zIndex: 1,
-            background: `conic-gradient(from 0deg, transparent 0deg, transparent 240deg, ${combo.blob}00 252deg, ${combo.blob}90 286deg, #fff9 304deg, ${combo.blob}70 325deg, transparent 360deg)`,
-            boxShadow: `0 0 24px ${combo.blob}40`,
-            WebkitMask: 'radial-gradient(farthest-side, transparent calc(100% - 11px), #000 calc(100% - 11px), #000 calc(100% - 5px), transparent calc(100% - 5px))',
-            mask: 'radial-gradient(farthest-side, transparent calc(100% - 11px), #000 calc(100% - 11px), #000 calc(100% - 5px), transparent calc(100% - 5px))',
-          }}
-        />
+            background: `radial-gradient(circle, #fff 0%, ${(combo as any).ringOuter ?? combo.blob}44 60%, ${(combo as any).ringInner ?? combo.blob}cc 95%)`,
+            boxShadow: `0 0 24px ${(combo as any).ringOuter ?? combo.blob}aa`,
+          }} />
+        </motion.div>
+        {/* soft bubbles */}
+        {[
+          { x: '18%', y: '18%', size: 46, delay: 0 },
+          { x: '42%', y: '8%',  size: 36, delay: 0.8 },
+          { x: '10%', y: '65%', size: 30, delay: 0.4 },
+          { x: '34%', y: '78%', size: 54, delay: 1.2 },
+        ].map((b, i) => (
+          <motion.div
+            key={i}
+            animate={{ y: [0, -8, 0], x: [0, 6, 0], opacity: [0.65, 0.9, 0.65] }}
+            transition={{ duration: 5 + i, repeat: Infinity, ease: 'easeInOut', delay: b.delay }}
+            style={{
+              position: 'absolute',
+              top: b.y,
+              left: b.x,
+              width: b.size,
+              height: b.size,
+              borderRadius: '50%',
+              background: `radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9) 0%, ${(combo as any).ringOuter ?? combo.blob}aa 55%, ${(combo as any).ringInner ?? combo.blob}55 75%, transparent 100%)`,
+              boxShadow: `0 8px 18px ${(combo as any).ringOuter ?? combo.blob}33`,
+              backdropFilter: 'blur(4px)',
+              zIndex: 1,
+            }}
+          />
+        ))}
 
         <motion.div
-          style={{
-            position: 'absolute',
-            width: `${orbitRadius * 2 + 5}vh`,
-            height: `${orbitRadius * 2 + 5}vh`,
-            borderRadius: '50%',
-            top: '50%',
-            left: circleLeft,
-            x: '-50%',
-            y: '-50%',
-            rotate: reverseRotation,
-            zIndex: 1,
-            background: `conic-gradient(from 180deg, transparent 0deg, transparent 130deg, ${combo.blob}10 152deg, ${combo.blob}50 198deg, transparent 236deg, transparent 360deg)`,
-            WebkitMask: 'radial-gradient(farthest-side, transparent calc(100% - 14px), #000 calc(100% - 14px), #000 calc(100% - 10px), transparent calc(100% - 10px))',
-            mask: 'radial-gradient(farthest-side, transparent calc(100% - 14px), #000 calc(100% - 14px), #000 calc(100% - 10px), transparent calc(100% - 10px))',
-          }}
-        />
-
-        <motion.div
-          style={{
-            position: 'absolute',
-            width: `${orbitRadius * 2 + 3}vh`,
-            height: `${orbitRadius * 2 + 3}vh`,
-            borderRadius: '50%',
-            top: '50%',
-            left: circleLeft,
-            x: '-50%',
-            y: '-50%',
-            rotate: rotation,
-            zIndex: 1,
-            background: `conic-gradient(from 45deg, transparent 0deg, ${combo.blob}25 40deg, ${combo.blob}80 92deg, #fff7 112deg, transparent 150deg, transparent 360deg)`,
-            WebkitMask: 'radial-gradient(farthest-side, transparent calc(100% - 9px), #000 calc(100% - 9px), #000 calc(100% - 3px), transparent calc(100% - 3px))',
-            mask: 'radial-gradient(farthest-side, transparent calc(100% - 9px), #000 calc(100% - 9px), #000 calc(100% - 3px), transparent calc(100% - 3px))',
-          }}
-        />
-
-        <motion.div
-          animate={{ opacity: [0.28, 0.46, 0.28] }}
+          animate={{ opacity: [0.32, 0.52, 0.32] }}
           transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
           style={{
             position: 'absolute',
-            width: `${orbitRadius * 2 + 1}vh`,
-            height: `${orbitRadius * 2 + 1}vh`,
+            width: `${orbitRadius * 2 + 2}vh`,
+            height: `${orbitRadius * 2 + 2}vh`,
             borderRadius: '50%',
             top: '50%',
             left: circleLeft,
             x: '-50%',
             y: '-50%',
             zIndex: 1,
-            border: `2px solid ${combo.blob}35`,
-            boxShadow: `0 0 18px ${combo.blob}18 inset`,
+            border: `3.5px solid ${combo.blob}60`,
+            boxShadow: `0 0 26px ${combo.blob}30 inset`,
           }}
         />
 
         <motion.div
           animate={{
             boxShadow: [
-              `0 0 0 2px ${combo.blob}35, 0 0 24px ${combo.blob}20, inset 0 0 0 2px ${combo.blob}18`,
-              `0 0 0 3px ${combo.blob}60, 0 0 52px ${combo.blob}35, inset 0 0 0 4px ${combo.blob}22`,
-              `0 0 0 2px ${combo.blob}35, 0 0 24px ${combo.blob}20, inset 0 0 0 2px ${combo.blob}18`,
+              `0 0 0 2px ${combo.blob}40, 0 0 32px ${combo.blob}26, inset 0 0 0 2px ${combo.blob}1c`,
+              `0 0 0 4px ${combo.blob}70, 0 0 60px ${combo.blob}42, inset 0 0 0 4px ${combo.blob}26`,
+              `0 0 0 2px ${combo.blob}40, 0 0 32px ${combo.blob}26, inset 0 0 0 2px ${combo.blob}1c`,
             ],
           }}
           transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}
@@ -395,18 +381,36 @@ const ScrollShowcase = () => {
             rotate: rotation,
             zIndex: 1,
             background: `radial-gradient(circle, transparent 72%, ${combo.blob}10 79%, transparent 100%)`,
-            border: `4px solid ${combo.blob}`,
+            border: `5px solid ${combo.blob}dd`,
             transition: 'border-color 0.65s ease',
           }}
         />
 
         <motion.div
-          animate={{ opacity: [0.26, 0.5, 0.26] }}
+          animate={{ opacity: [0.32, 0.56, 0.32] }}
           transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
           style={{
             position: 'absolute',
-            width: `${orbitRadius * 2 - 4}vh`,
-            height: `${orbitRadius * 2 - 4}vh`,
+            width: `${orbitRadius * 2 - 2}vh`,
+            height: `${orbitRadius * 2 - 2}vh`,
+            borderRadius: '50%',
+            top: '50%',
+            left: circleLeft,
+            x: '-50%',
+            y: '-50%',
+            zIndex: 1,
+            border: `2.5px solid ${combo.blob}80`,
+            boxShadow: `inset 0 0 34px ${combo.blob}22`,
+          }}
+        />
+
+        <motion.div
+          animate={{ opacity: [0.2, 0.38, 0.2] }}
+          transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
+          style={{
+            position: 'absolute',
+            width: `${orbitRadius * 2 - 8}vh`,
+            height: `${orbitRadius * 2 - 8}vh`,
             borderRadius: '50%',
             top: '50%',
             left: circleLeft,
@@ -414,182 +418,157 @@ const ScrollShowcase = () => {
             y: '-50%',
             zIndex: 1,
             border: `2px solid ${combo.blob}55`,
-            boxShadow: `inset 0 0 28px ${combo.blob}14`,
           }}
         />
 
         <motion.div
-          animate={{ opacity: [0.16, 0.3, 0.16] }}
-          transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
-          style={{
-            position: 'absolute',
-            width: `${orbitRadius * 2 - 10}vh`,
-            height: `${orbitRadius * 2 - 10}vh`,
-            borderRadius: '50%',
-            top: '50%',
-            left: circleLeft,
-            x: '-50%',
-            y: '-50%',
-            zIndex: 1,
-            border: `1.5px solid ${combo.blob}35`,
-          }}
-        />
-
-        <motion.div
-          animate={{ opacity: [0.18, 0.34, 0.18] }}
+          animate={{ opacity: [0.22, 0.42, 0.22] }}
           transition={{ duration: 3.1, repeat: Infinity, ease: 'easeInOut' }}
           style={{
             position: 'absolute',
-            width: `${orbitRadius * 2 - 16}vh`,
-            height: `${orbitRadius * 2 - 16}vh`,
+            width: `${orbitRadius * 2 - 14}vh`,
+            height: `${orbitRadius * 2 - 14}vh`,
             borderRadius: '50%',
             top: '50%',
             left: circleLeft,
             x: '-50%',
             y: '-50%',
             zIndex: 1,
-            background: `radial-gradient(circle, ${combo.blob}08 0%, transparent 62%)`,
-            boxShadow: `inset 0 0 40px ${combo.blob}10`,
+            background: `radial-gradient(circle, ${combo.blob}20 0%, transparent 66%)`,
+            boxShadow: `inset 0 0 48px ${combo.blob}20`,
           }}
         />
 
-        {/* ── FOOD IMAGE — orbits the oval clockwise from top on scroll ── */}
-        {/* x/y offset from oval center computed from ellipse parametric equations */}
-        <motion.div
+        {/* ── FOOD IMAGE — slides from above, time-based with active change ── */}
+        <div
           style={{
             position: 'absolute',
-            top: '50%', left: circleLeft,
-            width: 0, height: 0,
+            top: '45%',
+            left: '18%', // shift image further left
+            transform: 'translate(-50%, -50%)',
+            width: '46vh',
             zIndex: 3,
-            x: orbitX,
-            y: orbitY,
           }}
         >
-          <motion.div
-            style={{
-              position: 'absolute',
-              x: '-50%', y: '-50%',
-              width: '25vh',
-              rotate: imageTilt,
-              scale: imageScale,
-            }}
-          >
-            <motion.div
-              animate={{ scale: [0.96, 1.02, 0.96], opacity: [0.2, 0.35, 0.2] }}
-              transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
+          <AnimatePresence mode="wait">
+            <motion.img
+              key={`img-${active}`}
+              src={combo.image}
+              alt={combo.name}
+              initial={{ opacity: 0, scale: 0.88, rotate: -4, filter: 'blur(10px)' }}
+              animate={{
+                opacity: 1,
+                scale: [0.88, 1.06, 1],
+                rotate: [-4, 1.5, 0],
+                filter: ['blur(10px)', 'blur(2px)', 'blur(0px)'],
+              }}
+              exit={{ opacity: 0, scale: 0.94, rotate: -2, filter: 'blur(8px)' }}
+              transition={{ duration: 0.62, ease: [0.22, 1, 0.36, 1] }}
               style={{
-                position: 'absolute',
-                inset: '-8%',
-                borderRadius: '32px',
-                background: `radial-gradient(circle, ${combo.blob}22 0%, transparent 72%)`,
-                filter: 'blur(16px)',
-                zIndex: 0,
+                width: '100%', height: 'auto', objectFit: 'contain', display: 'block',
+                borderRadius: '24px',
+                filter: 'drop-shadow(0 22px 44px rgba(0,0,0,0.22))',
               }}
             />
-            <AnimatePresence mode="sync">
-              <motion.img
-                key={`img-${active}`}
-                src={combo.image}
-                alt={combo.name}
-                initial={{ opacity: 0, scale: 0.7, filter: 'blur(12px)' }}
-                animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-                exit={{ opacity: 0, scale: 1.1, filter: 'blur(8px)' }}
-                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                style={{
-                  width: '100%', height: 'auto', objectFit: 'contain', display: 'block',
-                  position: 'relative',
-                  zIndex: 1,
-                  borderRadius: '24px',
-                  filter: 'drop-shadow(0 22px 44px rgba(0,0,0,0.22))',
-                }}
-              />
-            </AnimatePresence>
-          </motion.div>
-        </motion.div>
+          </AnimatePresence>
+        </div>
 
         {/* ── RIGHT GLASSMORPHISM CARD ── */}
         <div style={{
           position: 'absolute', right: '3%', top: '50%', transform: 'translateY(-50%)',
-          width: 'min(600px, 48vw)', // Much larger width
-          background: 'rgba(255,255,255,0.78)',
-          backdropFilter: 'blur(24px)',
-          WebkitBackdropFilter: 'blur(24px)',
-          borderRadius: '24px',
-          padding: '22px',
-          boxShadow: '0 20px 60px rgba(0,0,0,0.10), 0 0 0 1px rgba(255,255,255,0.65)',
+          width: 'min(640px, 50vw)',
           zIndex: 5,
+          padding: '12px',
         }}>
-          {/* Section Title */}
-          <h2 style={{
-            fontSize: '1.35rem',
-            fontWeight: 900,
-            color: '#d97706',
-            margin: '0 0 18px 0',
-            letterSpacing: '-0.01em',
-            lineHeight: 1.1,
-            textTransform: 'uppercase',
-            textAlign: 'left',
+          <div style={{
+            position: 'relative',
+            borderRadius: '24px',
+            overflow: 'hidden',
+            background: `linear-gradient(120deg, ${(combo as any).ringOuter ?? combo.blob}14 0%, #fff 45%, ${(combo as any).ringInner ?? combo.accent}12 100%)`,
+            boxShadow: `0 28px 80px ${(combo as any).ringInner ?? combo.accent}25`,
+            border: `1px solid ${(combo as any).ringOuter ?? combo.blob}30`,
+            backdropFilter: 'blur(6px)',
           }}>
-            Combo Details
-          </h2>
-          <div style={{ display: 'flex', gap: '18px', marginBottom: '18px', borderBottom: '1px solid rgba(0,0,0,0.07)', paddingBottom: '12px' }}>
-            <motion.span
-              animate={{ color: '#1a1008', borderBottomColor: combo.blob }}
-              transition={{ duration: 0.4 }}
-              style={{ fontSize: '0.8rem', fontWeight: 800, paddingBottom: '12px', marginBottom: '-13px', borderBottom: '2.5px solid' }}
-            >
-              Overview
-            </motion.span>
-            <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#bbb' }}>Highlights</span>
-          </div>
+            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 20% 20%, rgba(255,255,255,0.5) 0%, transparent 45%)', pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', right: 18, top: 18, width: 64, height: 64, borderRadius: '50%', background: `${combo.blob}18`, filter: 'blur(12px)' }} />
 
-          <AnimatePresence mode="sync">
-            <motion.div
-              key={`card-${active}`}
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.42 }}
-            >
+            <AnimatePresence mode="wait">
               <motion.div
-                animate={{ backgroundColor: combo.blob }}
-                transition={{ duration: 0.5 }}
-                style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 48, height: 48, borderRadius: '14px', marginBottom: '12px' }}
+                key={`card-${active}`}
+                initial={{ opacity: 0, x: 60, rotate: 2 }}
+                animate={{ opacity: 1, x: 0, rotate: 0 }}
+                exit={{ opacity: 0, x: -40, rotate: -2 }}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                style={{ position: 'relative', padding: '26px 28px 26px 26px', display: 'grid', gap: '10px' }}
               >
-                <span style={{ fontSize: '1.3rem', fontWeight: 900, color: '#fff' }}>0{active + 1}</span>
-              </motion.div>
-
-              <h3 style={{ margin: '0 0 4px', color: '#1a1008', fontSize: 'clamp(1rem, 1.8vw, 1.35rem)', fontWeight: 900, lineHeight: 1.1, letterSpacing: '-0.02em' }}>
-                {combo.name.replace('\n', ' ')}
-              </h3>
-              <p style={{ margin: '0 0 12px', color: combo.blob, fontSize: '0.68rem', fontWeight: 700 }}>
-                {combo.label}
-              </p>
-              <p style={{ margin: '0 0 14px', color: '#6b5744', fontSize: '0.76rem', lineHeight: 1.72 }}>
-                {combo.desc}
-              </p>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginBottom: '18px' }}>
-                {combo.highlights.map((h) => (
-                  <span key={h} style={{ padding: '3px 9px', borderRadius: '999px', background: `${combo.blob}20`, color: combo.accent, fontSize: '0.66rem', fontWeight: 700 }}>
-                    {h}
-                  </span>
-                ))}
-              </div>
-
-              <div style={{ display: 'flex', gap: '8px' }}>
-                <motion.button
-                  whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-                  animate={{ backgroundColor: combo.blob }}
-                  transition={{ duration: 0.4 }}
-                  style={{ flex: 1, padding: '10px', borderRadius: '12px', border: 'none', color: '#fff', fontSize: '0.76rem', fontWeight: 800, cursor: 'pointer' }}
+                <motion.div
+                  animate={{ backgroundColor: combo.blob, boxShadow: `0 10px 30px ${combo.blob}55` }}
+                  transition={{ duration: 0.45 }}
+                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 56, height: 56, borderRadius: '16px', color: '#fff', fontWeight: 900, fontSize: '1.3rem', letterSpacing: '-0.02em' }}
                 >
-                  Order Now
-                </motion.button>
-                <button style={{ width: 38, height: 38, borderRadius: '12px', border: '1.5px solid rgba(0,0,0,0.1)', background: 'transparent', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>♡</button>
-                <button style={{ width: 38, height: 38, borderRadius: '12px', border: '1.5px solid rgba(0,0,0,0.1)', background: 'transparent', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>☆</button>
-              </div>
-            </motion.div>
-          </AnimatePresence>
+                  0{active + 1}
+                </motion.div>
+
+                <div style={{ display: 'grid', gap: '6px' }}>
+                  <motion.h3
+                    style={{ margin: 0, color: '#130c06', fontSize: 'clamp(1.25rem, 2.4vw, 1.8rem)', fontWeight: 900, letterSpacing: '-0.03em' }}
+                    initial={{ opacity: 0, y: 14 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.45, delay: 0.05 }}
+                  >
+                    {combo.name.replace('\n', ' ')}
+                  </motion.h3>
+                  <motion.p
+                    style={{ margin: 0, color: combo.blob, fontSize: '0.78rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.12em' }}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: 0.12 }}
+                  >
+                    {combo.label}
+                  </motion.p>
+                </div>
+
+                <motion.p
+                  style={{ margin: '2px 0 6px', color: '#4c3a2a', fontSize: '0.9rem', lineHeight: 1.75, maxWidth: '520px' }}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45, delay: 0.18 }}
+                >
+                  {combo.desc}
+                </motion.p>
+
+                <motion.div
+                  style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}
+                  initial="hidden"
+                  animate="visible"
+                  variants={{
+                    hidden: {},
+                    visible: { transition: { staggerChildren: 0.06, delayChildren: 0.24 } },
+                  }}
+                >
+                  {combo.highlights.map((h) => (
+                    <motion.span
+                      key={h}
+                      variants={{ hidden: { y: 10, opacity: 0 }, visible: { y: 0, opacity: 1 } }}
+                      style={{
+                        padding: '6px 12px',
+                        borderRadius: '999px',
+                        background: `${combo.blob}16`,
+                        color: combo.accent,
+                        fontSize: '0.78rem',
+                        fontWeight: 800,
+                        letterSpacing: '0.02em',
+                        boxShadow: `0 6px 16px ${combo.blob}20`,
+                        border: `1px solid ${combo.blob}28`,
+                      }}
+                    >
+                      {h}
+                    </motion.span>
+                  ))}
+                </motion.div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
         </div>
 
         {/* ── BOTTOM THUMBNAIL ROW WITH ARROWS ── */}
@@ -649,7 +628,12 @@ const Combos = () => {
     <MainLayout>
       <section
         className="min-h-screen"
-        style={{ position: 'relative', background: 'linear-gradient(160deg, #faf8f5 0%, #f4ead8 100%)', overflow: 'clip' }}
+        style={{
+          position: 'relative',
+          background: `linear-gradient(160deg, ${items[activeIndex].accent}0f 0%, #faf8f5 45%, ${items[activeIndex].accent}12 100%)`,
+          overflow: 'clip',
+          transition: 'background 0.6s ease',
+        }}
       >
         {/* Blobs */}
         {floatingBlobs.map((blob, i) => (

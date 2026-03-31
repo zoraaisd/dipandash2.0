@@ -46,7 +46,7 @@ const HeroSection = () => {
         position: 'relative',
         overflow: 'hidden',
         background: '#ede0ce',
-        padding: '40px 24px',
+        padding: '10px 24px 10px',
       }}
     >
       <div className="max-w-7xl mx-auto w-full" style={{ position: 'relative', zIndex: 3 }}>
@@ -58,11 +58,11 @@ const HeroSection = () => {
               borderRadius: '32px',
               overflow: 'hidden',
               boxShadow: '0 32px 80px rgba(0,0,0,0.35)',
-              padding: '24px',
+              padding: '0 24px 4px',
             }}
           >
-          <div className="grid grid-cols-1 lg:grid-cols-[1.08fr_0.92fr] gap-8 lg:gap-10 items-center" style={{ minHeight: 'min(38vh, 380px)' }}>
-            <div className="flex flex-col gap-7" style={{ padding: 'clamp(8px, 2vw, 18px)' }}>
+          <div className="grid grid-cols-1 lg:grid-cols-[1.08fr_0.92fr] gap-4 lg:gap-6 items-center" style={{ minHeight: 'min(20vh, 200px)' }}>
+            <div className="flex flex-col gap-4" style={{ padding: 'clamp(4px, 1vw, 10px)' }}>
               <div style={{ overflow: 'hidden' }}>
                 <motion.div
                   style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3em', alignItems: 'center' }}
@@ -168,7 +168,7 @@ const HeroSection = () => {
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '8px',
-                    padding: '15px 36px',
+                    padding: '10px 28px',
                     borderRadius: '50px',
                     backgroundColor: '#fd0802',
                     color: '#000',
@@ -186,7 +186,7 @@ const HeroSection = () => {
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
-                    padding: '15px 36px',
+                    padding: '10px 28px',
                     borderRadius: '50px',
                     backgroundColor: 'rgba(255,255,255,0.06)',
                     border: '1.5px solid rgba(255,255,255,0.18)',
@@ -205,7 +205,7 @@ const HeroSection = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.6, delay: 0.9 }}
-                style={{ marginTop: '8px' }}
+                style={{ marginTop: '0px' }}
               >
                 {stats.map((s) => (
                   <div key={s.l}>
@@ -225,6 +225,7 @@ const HeroSection = () => {
                 width: '100%',
                 maxWidth: '320px',
                 justifySelf: 'center',
+                marginTop: '-40px',
               }}
             >
               <div
