@@ -59,7 +59,7 @@ const Footer = () => {
           {/* Desktop: 5 columns | Mobile: compact 2-col grid */}
           <div className="grid grid-cols-2 lg:grid-cols-5 gap-x-4 gap-y-5 items-start">
 
-            {/* 1. Brand — full width on mobile, 1 col on desktop */}
+            {/* 1. Brand - full width on mobile, 1 col on desktop */}
             <div className="col-span-2 lg:col-span-1">
               <div className="flex items-center gap-2 mb-1">
                 <img src="/Transperent Logo.png" alt="Dip & Dash" style={{ height: '28px', width: 'auto', objectFit: 'contain' }} />
@@ -68,7 +68,7 @@ const Footer = () => {
                 </span>
               </div>
               <p style={{ color: '#a1a1aa', fontSize: '0.72rem', lineHeight: 1.5, margin: 0 }}>
-                Bold flavors, fresh ingredients, and a passion for great food — served with love every single day.
+                Bold flavors, fresh ingredients, and a passion for great food - served with love every single day.
               </p>
             </div>
 

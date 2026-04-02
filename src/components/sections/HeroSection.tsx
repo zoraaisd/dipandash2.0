@@ -248,7 +248,7 @@ const HeroSection = () => {
                   overflow: 'visible',
                 }}
               >
-                {/* Video — always takes space, just fades out */}
+                {/* Video - always takes space, just fades out */}
                 <video
                   ref={videoRef}
                   muted
@@ -268,7 +268,7 @@ const HeroSection = () => {
                   <source src="/media/foodVideo.mp4" type="video/mp4" />
                 </video>
 
-                {/* Title logo — zooms in when video ends */}
+                {/* Title logo - zooms in when video ends */}
                 <div style={{
                   position: 'absolute',
                   inset: 0,

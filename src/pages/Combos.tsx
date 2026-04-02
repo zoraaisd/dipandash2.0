@@ -47,7 +47,7 @@ const showcaseCombos = [
     name: 'Crunch\nCombo',
     label: 'Crispy Favourite',
     tagline: 'Golden. Crispy. Irresistible.',
-    desc: 'Every bite of the Crunch Combo is packed with crispy coated pieces, golden fries, and a chilled drink — a perfectly balanced everyday indulgence.',
+    desc: 'Every bite of the Crunch Combo is packed with crispy coated pieces, golden fries, and a chilled drink - a perfectly balanced everyday indulgence.',
     highlights: ['Crispy Chicken Bites', 'Golden Fries', 'Dipping Sauce', 'Chilled Drink'],
     image: '/compos/fish_crunch.png',
     blob: '#f4a62a',
@@ -59,7 +59,7 @@ const showcaseCombos = [
     name: 'Fish &\nChips',
     label: 'Ocean Classic',
     tagline: 'Light. Fresh. Satisfying.',
-    desc: 'A timeless classic reimagined — tender golden fish fillets with perfectly crisp chips and a side of tartar sauce. The sea never tasted this good.',
+    desc: 'A timeless classic reimagined - tender golden fish fillets with perfectly crisp chips and a side of tartar sauce. The sea never tasted this good.',
     highlights: ['Fish Fillet', 'Crispy Chips', 'Tartar Sauce', 'Lemon Wedge'],
     image: '/compos/oceanChips.png',
     blob: '#d4a843',
@@ -83,7 +83,7 @@ const showcaseCombos = [
     name: 'Prawn\nCombo',
     label: 'Premium Seafood',
     tagline: 'Bold. Juicy. Premium.',
-    desc: 'The Prawn Combo brings the ocean to your table — plump, seasoned prawns with crispy sides and a premium presentation that looks as good as it tastes.',
+    desc: 'The Prawn Combo brings the ocean to your table - plump, seasoned prawns with crispy sides and a premium presentation that looks as good as it tastes.',
     highlights: ['Seasoned Prawns', 'Crispy Sides', 'Signature Sauce', 'Premium Plating'],
     image: '/compos/prawnCompo.png',
     blob: '#e8845a',
@@ -485,7 +485,7 @@ const ScrollShowcase = () => {
           }}
         />
 
-        {/* ── FOOD IMAGE — slides from above, time-based with active change ── */}
+        {/* ── FOOD IMAGE - slides from above, time-based with active change ── */}
         <div
           className="showcase-image-wrap"
           style={{

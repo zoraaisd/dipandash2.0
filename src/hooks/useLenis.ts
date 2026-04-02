@@ -9,7 +9,7 @@ export function getLenis() {
 
 export function useLenis() {
   useEffect(() => {
-    // Skip Lenis on touch devices — use native scroll instead
+    // Skip Lenis on touch devices - use native scroll instead
     const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     if (isTouchDevice) return;
 

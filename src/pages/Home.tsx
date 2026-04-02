@@ -777,7 +777,7 @@ const Home = () => {
         {/* Dark overlay for contrast */}
         <div style={{ position: 'absolute', inset: 0, background: 'rgba(10,4,0,0.45)', zIndex: 1 }} />
 
-        {/* Top blend — fades from combos section colour into this section */}
+        {/* Top blend - fades from combos section colour into this section */}
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '160px', background: 'linear-gradient(to bottom, #ede0ce 0%, rgba(237,224,206,0) 100%)', zIndex: 2, pointerEvents: 'none' }} />
 
         {/* Content */}
@@ -891,7 +891,7 @@ const Home = () => {
                 transition={{ duration: 0.5, delay: 0.1 + i * 0.08 }}
                 whileHover={{ y: -6, boxShadow: '0 14px 36px rgba(0,0,0,0.26)', transition: { duration: 0.22 } }}
               >
-                {/* Image — row on mobile, full-width top on sm+ */}
+                {/* Image - row on mobile, full-width top on sm+ */}
                 <div className="w-2/5 sm:w-full" style={{ flexShrink: 0, minHeight: '110px' }}>
                   <img
                     src={card.img}
