@@ -73,7 +73,7 @@ const showcaseCombos = [
     tagline: 'Made to Share. Built to Impress.',
     desc: 'The Party Box is your go-to for group hangouts, game nights, and celebrations. Loaded with a mix of crowd-pleasers every single time.',
     highlights: ['Mixed Snacks', 'Loaded Fries', 'Dips Platter', 'Group Drinks'],
-    image: '/compos/partybox.jpeg',
+    image: '/compos/party_Box.png',
     blob: '#e07b3a',
     accent: '#8a3a10',
     ringOuter: '#e07b3a',
@@ -147,7 +147,14 @@ const ScrollShowcase = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
   const prevIdx = useRef(0);
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 768);
   const { scrollYProgress } = useScroll({ target: containerRef, offset: ['start start', 'end end'] });
+
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
 
   useEffect(() => {
     const N = showcaseCombos.length;
@@ -178,11 +185,50 @@ const ScrollShowcase = () => {
 
   // Each combo: image moves from start (black mark) to end (red mark) independently
 
+  /* ── Mobile layout ── */
+  if (isMobile) {
+    return (
+      <div style={{ marginTop: '40px', padding: '0 16px 40px' }}>
+        {showcaseCombos.map((item, i) => (
+          <div key={i} style={{
+            marginBottom: '32px',
+            borderRadius: '24px',
+            overflow: 'hidden',
+            background: `linear-gradient(135deg, ${item.ringOuter}14 0%, #fffaf4 50%, ${item.ringInner}12 100%)`,
+            boxShadow: `0 12px 40px ${item.blob}22`,
+            border: `1px solid ${item.blob}25`,
+          }}>
+            {/* Image */}
+            <div style={{ width: '100%', background: `radial-gradient(ellipse at 50% 50%, ${item.blob}28 0%, transparent 70%)`, padding: '24px 16px 8px', display: 'flex', justifyContent: 'center' }}>
+              <img src={item.image} alt={item.name} style={{ width: '70%', maxWidth: '240px', height: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 16px 32px rgba(0,0,0,0.22))' }} />
+            </div>
+            {/* Content */}
+            <div style={{ padding: '16px 20px 24px', display: 'grid', gap: '10px' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 44, height: 44, borderRadius: '12px', background: item.blob, color: '#fff', fontWeight: 900, fontSize: '1.1rem', boxShadow: `0 8px 24px ${item.blob}55` }}>
+                0{i + 1}
+              </div>
+              <div>
+                <h3 style={{ margin: 0, color: '#130c06', fontSize: '1.5rem', fontWeight: 900, letterSpacing: '-0.02em' }}>{item.name.replace('\n', ' ')}</h3>
+                <p style={{ margin: '4px 0 0', color: item.blob, fontSize: '0.72rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.12em' }}>{item.label}</p>
+              </div>
+              <p style={{ margin: 0, color: '#4c3a2a', fontSize: '0.88rem', lineHeight: 1.7 }}>{item.desc}</p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                {item.highlights.map((h) => (
+                  <span key={h} style={{ padding: '5px 12px', borderRadius: '999px', background: `${item.blob}18`, color: item.accent, fontSize: '0.75rem', fontWeight: 800, border: `1px solid ${item.blob}28` }}>{h}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div ref={containerRef} style={{ height: `${showcaseCombos.length * 100}vh`, marginTop: '80px', position: 'relative' }}>
 
       {/* ── Sticky full-screen frame ── */}
-      <div style={{
+      <div className="showcase-sticky" style={{
         position: 'sticky', top: '56px',
         height: 'calc(100vh - 56px)',
         borderRadius: '28px',
@@ -241,7 +287,7 @@ const ScrollShowcase = () => {
         />
 
         {/* ── LEFT VERTICAL DOTS ── */}
-        <div style={{ position: 'absolute', left: '24px', top: '50%', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', gap: '10px', zIndex: 5 }}>
+        <div className="showcase-dots" style={{ position: 'absolute', left: '24px', top: '50%', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', gap: '10px', zIndex: 5 }}>
           {showcaseCombos.map((_, i) => (
             <motion.div
               key={i}
@@ -441,10 +487,11 @@ const ScrollShowcase = () => {
 
         {/* ── FOOD IMAGE — slides from above, time-based with active change ── */}
         <div
+          className="showcase-image-wrap"
           style={{
             position: 'absolute',
             top: '45%',
-            left: '18%', // shift image further left
+            left: '18%',
             transform: 'translate(-50%, -50%)',
             width: '46vh',
             zIndex: 3,
@@ -474,7 +521,7 @@ const ScrollShowcase = () => {
         </div>
 
         {/* ── RIGHT GLASSMORPHISM CARD ── */}
-        <div style={{
+        <div className="showcase-card" style={{
           position: 'absolute', right: '3%', top: '50%', transform: 'translateY(-50%)',
           width: 'min(640px, 50vw)',
           zIndex: 5,
@@ -572,7 +619,7 @@ const ScrollShowcase = () => {
         </div>
 
         {/* ── BOTTOM THUMBNAIL ROW WITH ARROWS ── */}
-        <div style={{
+        <div className="showcase-thumbnails" style={{
           position: 'absolute', bottom: '5%', left: '50%', transform: 'translateX(-50%)',
           display: 'flex', alignItems: 'center', gap: '18px', zIndex: 5,
         }}>

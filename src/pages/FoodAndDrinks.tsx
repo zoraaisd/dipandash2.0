@@ -151,10 +151,6 @@ const FoodAndDrinks = () => {
             ))}
           </div>
 
-          {/* Result count */}
-          <p style={{ color: '#aaa', fontSize: '0.78rem', marginBottom: '20px' }}>
-            {items.length} item{items.length !== 1 ? 's' : ''} {search ? `for "${search}"` : `in ${active}`}
-          </p>
 
           {/* Cards grid */}
           {items.length === 0 ? (

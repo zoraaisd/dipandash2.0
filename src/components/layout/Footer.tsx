@@ -5,7 +5,6 @@ const quickLinks = [
   { label: 'Home',          to: ROUTES.HOME },
   { label: 'Food & Drinks', to: ROUTES.FOOD_AND_DRINKS },
   { label: 'Combos',        to: ROUTES.COMBOS },
-  { label: 'About',         to: ROUTES.ABOUT },
   { label: 'Contact',       to: ROUTES.CONTACT },
 ];
 
@@ -47,54 +46,40 @@ const socials = [
 ];
 
 const Footer = () => {
+  const h4Style: React.CSSProperties = {
+    color: '#fd0802', fontWeight: 700, fontSize: '0.68rem',
+    letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '10px',
+  };
+
   return (
     <>
-      {/* ── Gold separator band ── */}
-      <div style={{
-        background: 'linear-gradient(90deg, #fd0802, #e08c00, #fd0802)',
-        padding: '16px 24px',
-        textAlign: 'center',
-      }}>
-        <p style={{ color: '#000', fontWeight: 800, fontSize: '0.82rem', letterSpacing: '0.22em', textTransform: 'uppercase', margin: 0 }}>
-          🍔 Bold Flavors · Fresh Every Day · Dip &amp; Dash
-        </p>
-      </div>
-
-      {/* ── Footer body ── */}
       <footer style={{ backgroundColor: '#1a1a1a' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style={{ padding: '20px 24px' }}>
 
-            {/* Brand */}
+          {/* Desktop: 5 columns | Mobile: compact 2-col grid */}
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-x-4 gap-y-5 items-start">
+
+            {/* 1. Brand — full width on mobile, 1 col on desktop */}
             <div className="col-span-2 lg:col-span-1">
-              <div className="mb-4 flex items-center gap-3">
-                <img
-                  src="/Transperent Logo.png"
-                  alt="Dip & Dash"
-                  style={{ height: '40px', width: 'auto', objectFit: 'contain' }}
-                />
-                <span style={{ color: '#ffffff', fontWeight: 800, fontSize: '1.1rem' }}>
+              <div className="flex items-center gap-2 mb-1">
+                <img src="/Transperent Logo.png" alt="Dip & Dash" style={{ height: '28px', width: 'auto', objectFit: 'contain' }} />
+                <span style={{ color: '#ffffff', fontWeight: 800, fontSize: '0.95rem' }}>
                   Dip <span style={{ color: '#fd0802' }}>&</span> Dash
                 </span>
               </div>
-              <p style={{ color: '#a1a1aa', fontSize: '0.85rem', lineHeight: 1.7, margin: 0 }}>
-                Bold flavors, fresh ingredients, and a passion for great food - served with love every single day.
+              <p style={{ color: '#a1a1aa', fontSize: '0.72rem', lineHeight: 1.5, margin: 0 }}>
+                Bold flavors, fresh ingredients, and a passion for great food — served with love every single day.
               </p>
             </div>
 
-            {/* Quick Links */}
+            {/* 2. Quick Links */}
             <div>
-              <h4 style={{ color: '#fd0802', fontWeight: 700, fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '16px' }}>
-                Quick Links
-              </h4>
-              <ul className="flex flex-col gap-2" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              <h4 style={h4Style}>Quick Links</h4>
+              <ul className="flex flex-col gap-1" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                 {quickLinks.map((link) => (
-                  <li key={link.to} className="flex items-center gap-2">
-                    <span style={{ color: '#fd0802', fontSize: '0.6rem' }}>▶</span>
-                    <NavLink
-                      to={link.to}
-                      style={{ color: '#a1a1aa', fontSize: '0.875rem', textDecoration: 'none' }}
-                    >
+                  <li key={link.to} className="flex items-center gap-1">
+                    <span style={{ color: '#fd0802', fontSize: '0.5rem' }}>▶</span>
+                    <NavLink to={link.to} style={{ color: '#a1a1aa', fontSize: '0.75rem', textDecoration: 'none' }}>
                       {link.label}
                     </NavLink>
                   </li>
@@ -102,14 +87,14 @@ const Footer = () => {
               </ul>
             </div>
 
-            {/* Follow Us */}
+            {/* 3. Follow Us */}
             <div>
-              <h4 style={{ color: '#fd0802', fontWeight: 700, fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '16px' }}>
-                Follow Us
-              </h4>
-              <div className="flex flex-col gap-3">
+              <h4 style={h4Style}>Follow Us</h4>
+              <div className="flex flex-col gap-1">
                 {socials.map((s) => (
-                  <a key={s.name} href={'href' in s ? s.href : undefined} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2" style={{ color: '#a1a1aa', fontSize: '0.875rem', textDecoration: 'none', cursor: 'href' in s ? 'pointer' : 'default' }}>
+                  <a key={s.name} href={s.href} target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-2"
+                    style={{ color: '#a1a1aa', fontSize: '0.75rem', textDecoration: 'none' }}>
                     <span>{s.svg}</span>
                     <span>{s.name}</span>
                   </a>
@@ -117,22 +102,39 @@ const Footer = () => {
               </div>
             </div>
 
-            {/* Contact */}
-            <div className="col-span-2 lg:col-span-1">
-              <h4 style={{ color: '#fd0802', fontWeight: 700, fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '16px' }}>
-                Contact
-              </h4>
-              <ul className="flex flex-col gap-3" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+            {/* 4. Contact */}
+            <div>
+              <h4 style={h4Style}>Contact</h4>
+              <ul className="flex flex-col gap-1" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                 {contactInfo.map((item) => (
-                  <li key={item.value} className="flex items-start gap-2" style={{ color: '#a1a1aa', fontSize: '0.875rem' }}>
-                    <span>{item.icon}</span>
+                  <li key={item.value} className="flex items-start gap-1" style={{ color: '#a1a1aa', fontSize: '0.72rem' }}>
+                    <span style={{ fontSize: '0.8rem', flexShrink: 0 }}>{item.icon}</span>
                     <span>{item.value}</span>
                   </li>
                 ))}
               </ul>
             </div>
-          </div>
 
+            {/* 5. Map */}
+            <div>
+              <h4 style={h4Style}>Find Us</h4>
+              <div style={{ borderRadius: '8px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)', width: '140px', height: '140px' }}>
+                <iframe
+                  title="Dip & Dash Location"
+                  src="https://maps.google.com/maps?q=No+12+Rajiv+Gandhi+Salai+Kandhanchavadi+Perungudi+Chennai+600096+India&output=embed&z=16"
+                  width="140"
+                  height="140"
+                  style={{ display: 'block', border: 'none' }}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
+              <p style={{ color: '#a1a1aa', fontSize: '0.65rem', marginTop: '4px', lineHeight: 1.4, maxWidth: '140px' }}>
+                📍 Kandhanchavadi, Perungudi, Chennai 600096
+              </p>
+            </div>
+
+          </div>
         </div>
       </footer>
     </>

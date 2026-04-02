@@ -7,7 +7,6 @@ const gooeyItems = [
   { label: 'Home',          href: ROUTES.HOME },
   { label: 'Food & Drinks', href: ROUTES.FOOD_AND_DRINKS },
   { label: 'Combos',        href: ROUTES.COMBOS },
-  { label: 'About',         href: ROUTES.ABOUT },
   { label: 'Contact',       href: ROUTES.CONTACT },
 ];
 
@@ -15,7 +14,6 @@ const navLinks = [
   { label: 'Home',          to: ROUTES.HOME },
   { label: 'Food & Drinks', to: ROUTES.FOOD_AND_DRINKS },
   { label: 'Combos',        to: ROUTES.COMBOS },
-  { label: 'About',         to: ROUTES.ABOUT },
   { label: 'Contact',       to: ROUTES.CONTACT },
 ];
 
@@ -83,7 +81,7 @@ const Navbar = () => {
       {/* ── Mobile dropdown ── */}
       {isOpen && (
         <div
-          style={{ backgroundColor: '#ffffff', borderTop: '1px solid rgba(0,0,0,0.08)' }}
+          style={{ backgroundColor: '#ffffff', borderTop: '1px solid rgba(0,0,0,0.08)', position: 'relative', zIndex: 100 }}
           className="md:hidden px-4 py-3 flex flex-col gap-1"
         >
           {navLinks.map((link) => (

@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import ROUTES from '../../routes/routePaths';
@@ -12,6 +12,9 @@ const stats = [
 const HeroSection = () => {
   const heroRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [orderHover, setOrderHover] = useState(false);
+  const [exploreHover, setExploreHover] = useState(false);
+  const [videoEnded, setVideoEnded] = useState(false);
   const { scrollYProgress: heroP } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const heroTextY = useTransform(heroP, [0, 1], [0, 70]);
   const heroOp = useTransform(heroP, [0, 0.6], [1, 0]);
@@ -20,20 +23,9 @@ const HeroSection = () => {
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          video.currentTime = 0;
-          video.playbackRate = 2.5;
-          video.play();
-        } else {
-          video.pause();
-        }
-      },
-      { threshold: 0.3 }
-    );
-    observer.observe(video);
-    return () => observer.disconnect();
+    video.play().catch(() => {});
+    video.addEventListener('ended', () => setVideoEnded(true));
+    return () => video.removeEventListener('ended', () => setVideoEnded(true));
   }, []);
 
   return (
@@ -42,30 +34,20 @@ const HeroSection = () => {
       style={{
         minHeight: '100vh',
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         position: 'relative',
-        overflow: 'hidden',
-        background: '#ede0ce',
-        padding: '10px 24px 10px',
+        overflow: 'visible',
+        background: '#000000',
+        padding: '60px 24px 40px',
       }}
     >
       <div className="max-w-7xl mx-auto w-full" style={{ position: 'relative', zIndex: 3 }}>
         <motion.div style={{ y: smoothTextY, opacity: heroOp }}>
-          {/* Black card */}
-          <div
-            style={{
-              background: '#000000',
-              borderRadius: '32px',
-              overflow: 'hidden',
-              boxShadow: '0 32px 80px rgba(0,0,0,0.35)',
-              padding: '0 24px 4px',
-            }}
-          >
           <div className="grid grid-cols-1 lg:grid-cols-[1.08fr_0.92fr] gap-4 lg:gap-6 items-center" style={{ minHeight: 'min(20vh, 200px)' }}>
             <div className="flex flex-col gap-4" style={{ padding: 'clamp(4px, 1vw, 10px)' }}>
-              <div style={{ overflow: 'hidden' }}>
+              <div style={{ overflow: 'visible', paddingTop: '8px' }}>
                 <motion.div
-                  style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3em', alignItems: 'center' }}
+                  style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6em', alignItems: 'center' }}
                   initial="hidden"
                   animate="visible"
                   variants={{ visible: { transition: { staggerChildren: 0.09, delayChildren: 0.15 } } }}
@@ -80,12 +62,20 @@ const HeroSection = () => {
                       transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
                       style={{
                         display: 'inline-block',
-                        fontSize: 'clamp(1.4rem, 3.5vw, 2.4rem)',
-                        fontWeight: 900,
-                        letterSpacing: '-0.02em',
-                        color: word === 'Dip' || word === '&' || word === 'Dash' ? '#fd0802' : '#ffffff',
+                        fontFamily: "'Great Vibes', cursive",
+                        fontSize: 'clamp(1.8rem, 4vw, 3rem)',
+                        fontWeight: 400,
+                        letterSpacing: '0.02em',
+                        color: word === 'Dip' || word === '&' ? '#f5c800' : word === 'Dash' ? '#fd0802' : '#ffffff',
+                        WebkitTextStroke: word === 'Dip' || word === '&' ? '0.6px #f5c800' : word === 'Dash' ? '0.6px #fd0802' : '0.6px #ffffff',
                         transformOrigin: 'bottom',
                         lineHeight: 1.1,
+                        filter:
+                          word === 'Dip' || word === '&'
+                            ? 'drop-shadow(0 0 6px rgba(245,200,0,1)) drop-shadow(0 0 18px rgba(245,150,0,0.8))'
+                            : word === 'Dash'
+                            ? 'drop-shadow(0 0 6px rgba(253,8,2,1)) drop-shadow(0 0 18px rgba(253,8,2,0.8))'
+                            : 'drop-shadow(0 0 4px rgba(255,255,255,0.6))',
                       }}
                     >
                       {word}
@@ -104,6 +94,7 @@ const HeroSection = () => {
                     transformOrigin: 'left',
                     marginTop: '6px',
                     width: '60%',
+                    boxShadow: '0 0 8px rgba(253,8,2,0.8)',
                   }}
                 />
               </div>
@@ -111,12 +102,17 @@ const HeroSection = () => {
               <div>
                 <motion.h1
                   style={{
+                    fontFamily: "'Playfair Display', serif",
                     fontSize: 'clamp(2.4rem, 5vw, 3.8rem)',
                     fontWeight: 900,
                     lineHeight: 1,
-                    color: '#ffffff',
                     margin: 0,
-                    letterSpacing: '-0.03em',
+                    letterSpacing: '-0.01em',
+                    background: 'linear-gradient(180deg, #fff5a0 0%, #f5c800 45%, #e07800 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                    filter: 'drop-shadow(0 0 12px rgba(245,200,0,0.95)) drop-shadow(0 0 30px rgba(245,150,0,0.6)) drop-shadow(0 2px 6px rgba(80,30,0,0.9))',
                   }}
                   initial={{ opacity: 0, y: 70 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -126,12 +122,17 @@ const HeroSection = () => {
                 </motion.h1>
                 <motion.h1
                   style={{
+                    fontFamily: "'Playfair Display', serif",
                     fontSize: 'clamp(2.4rem, 5vw, 3.8rem)',
                     fontWeight: 900,
                     lineHeight: 1,
-                    color: '#fd0802',
                     margin: 0,
-                    letterSpacing: '-0.03em',
+                    letterSpacing: '-0.01em',
+                    background: 'linear-gradient(180deg, #ffd060 0%, #ff6a00 50%, #cc2200 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                    filter: 'drop-shadow(0 0 12px rgba(255,100,0,0.95)) drop-shadow(0 0 30px rgba(220,50,0,0.6)) drop-shadow(0 2px 6px rgba(80,10,0,0.9))',
                   }}
                   initial={{ opacity: 0, y: 70 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -143,8 +144,9 @@ const HeroSection = () => {
 
               <motion.p
                 style={{
-                  color: 'rgba(255,255,255,0.82)',
+                  color: '#ffffff',
                   fontSize: '1.05rem',
+                  fontWeight: 600,
                   lineHeight: 1.85,
                   maxWidth: '520px',
                   margin: 0,
@@ -153,7 +155,7 @@ const HeroSection = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.6 }}
               >
-                Handcrafted burgers, crispy bites and refreshing drinks made fresh every single day and served with love.
+                Experience the Perfect Blend of Freshness, Flavor, and Fast Service Designed to Satisfy Your Cravings Anytime, Every Time.
               </motion.p>
 
               <motion.div
@@ -164,36 +166,44 @@ const HeroSection = () => {
               >
                 <NavLink
                   to={ROUTES.FOOD_AND_DRINKS}
+                  onMouseEnter={() => setOrderHover(true)}
+                  onMouseLeave={() => setOrderHover(false)}
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '8px',
                     padding: '10px 28px',
                     borderRadius: '50px',
-                    backgroundColor: '#fd0802',
-                    color: '#000',
+                    backgroundColor: orderHover ? '#fd0802' : 'transparent',
+                    color: '#ffffff',
                     fontWeight: 800,
                     fontSize: '0.9rem',
                     textDecoration: 'none',
-                    boxShadow: '0 8px 32px rgba(233,108,51,0.4)',
+                    border: '2px solid #fd0802',
+                    boxShadow: orderHover ? '0 0 24px rgba(253,8,2,1), 0 0 50px rgba(253,8,2,0.6)' : '0 0 14px rgba(253,8,2,0.8), 0 0 30px rgba(253,8,2,0.4)',
                     letterSpacing: '0.01em',
+                    transition: 'background-color 0.25s ease, box-shadow 0.25s ease',
                   }}
                 >
                   Order Now
                 </NavLink>
                 <NavLink
                   to={ROUTES.FOOD_AND_DRINKS}
+                  onMouseEnter={() => setExploreHover(true)}
+                  onMouseLeave={() => setExploreHover(false)}
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
                     padding: '10px 28px',
                     borderRadius: '50px',
-                    backgroundColor: 'rgba(255,255,255,0.06)',
-                    border: '1.5px solid rgba(255,255,255,0.18)',
-                    color: '#ffffff',
-                    fontWeight: 600,
+                    backgroundColor: exploreHover ? '#f5c800' : 'transparent',
+                    border: '2px solid #f5c800',
+                    color: exploreHover ? '#000000' : '#f5c800',
+                    fontWeight: 700,
                     fontSize: '0.9rem',
                     textDecoration: 'none',
+                    boxShadow: exploreHover ? '0 0 24px rgba(245,200,0,1), 0 0 50px rgba(245,200,0,0.6)' : '0 0 14px rgba(245,200,0,0.7), 0 0 30px rgba(245,200,0,0.3)',
+                    transition: 'background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease',
                   }}
                 >
                   Explore Menu
@@ -209,7 +219,7 @@ const HeroSection = () => {
               >
                 {stats.map((s) => (
                   <div key={s.l}>
-                    <p style={{ fontWeight: 900, fontSize: '1.6rem', color: '#ffffff', margin: '0 0 2px', letterSpacing: '-0.02em' }}>{s.n}</p>
+                    <p style={{ fontWeight: 900, fontSize: '1.6rem', color: '#f5c800', margin: '0 0 2px', letterSpacing: '-0.02em', textShadow: '0 0 12px rgba(245,200,0,0.9), 0 0 28px rgba(245,200,0,0.5)' }}>{s.n}</p>
                     <p style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.7)', margin: 0, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>{s.l}</p>
                   </div>
                 ))}
@@ -225,37 +235,64 @@ const HeroSection = () => {
                 width: '100%',
                 maxWidth: '320px',
                 justifySelf: 'center',
-                marginTop: '-40px',
               }}
             >
               <div
                 style={{
                   position: 'relative',
-                  overflow: 'hidden',
-                  borderRadius: '0',
-                  minHeight: '260px',
-                  background: 'none',
-                  border: 'none',
-                  boxShadow: 'none',
+                  width: '100%',
+                  height: '560px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  overflow: 'visible',
                 }}
               >
+                {/* Video — always takes space, just fades out */}
                 <video
                   ref={videoRef}
                   muted
+                  autoPlay
                   playsInline
-                  preload="auto"
+                  preload="metadata"
                   style={{
+                    position: 'absolute',
+                    inset: 0,
                     width: '100%',
                     height: '100%',
-                    minHeight: '260px',
                     objectFit: 'cover',
+                    transition: 'opacity 0.8s ease',
+                    opacity: videoEnded ? 0 : 1,
                   }}
                 >
                   <source src="/media/foodVideo.mp4" type="video/mp4" />
                 </video>
+
+                {/* Title logo — zooms in when video ends */}
+                <div style={{
+                  position: 'absolute',
+                  inset: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  pointerEvents: 'none',
+                  zIndex: 4,
+                }}>
+                  <motion.img
+                    src="/title_logo.png"
+                    alt="Dip & Dash"
+                    initial={{ opacity: 0, scale: 0.3 }}
+                    animate={videoEnded ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.3 }}
+                    transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                    style={{
+                      width: '700px',
+                      height: '700px',
+                      objectFit: 'contain',
+                    }}
+                  />
+                </div>
               </div>
             </motion.div>
-          </div>
           </div>
         </motion.div>
       </div>

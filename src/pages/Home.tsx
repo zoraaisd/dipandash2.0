@@ -88,6 +88,151 @@ const Marquee = ({ reverse = false, light = false }: { reverse?: boolean; light?
 
 
 /* ══════════════════════════════════════════════
+   COMBOS SECTION
+══════════════════════════════════════════════ */
+const combos = [
+  { img: '/compos/CrunchCombo.jpg',  name: 'Crunch Combo',  desc: 'Crispy prawns, golden fries & dip',  tag: 'Most Popular',  color: '#ff6a00' },
+  { img: '/compos/partybox.jpeg',    name: 'Party Box',     desc: 'The ultimate sharing feast for all', tag: 'Best Value',    color: '#fd0802' },
+  { img: '/compos/fish_crunch.png',  name: 'Fish Crunch',   desc: 'Beer-battered fish & crispy chips',  tag: 'Fan Favourite', color: '#f5a800' },
+];
+
+const CombosSection = ({ navigate }: { navigate: ReturnType<typeof useNavigate> }) => {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(sectionRef, { amount: 0.15 });
+
+  return (
+    <section ref={sectionRef} style={{ position: 'relative', overflow: 'hidden', backgroundColor: '#ede0ce' }}>
+
+      {/* Wave top */}
+      <div style={{ lineHeight: 0 }}>
+        <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block', width: '100%' }}>
+          <path d="M0,40 C180,0 360,80 540,40 C720,0 900,80 1080,40 C1260,0 1380,60 1440,40 L1440,0 L0,0 Z" fill="#ede0ce" />
+        </svg>
+      </div>
+
+      <div style={{ backgroundColor: '#ede0ce', position: 'relative', padding: '20px 0 40px' }}>
+
+        {/* Background orbs */}
+        <motion.div style={{ position: 'absolute', top: '-60px', left: '-80px', width: '480px', height: '480px', borderRadius: '50%', background: 'radial-gradient(circle at 50% 50%, rgba(233,108,51,0.18) 0%, rgba(245,140,0,0.07) 55%, transparent 75%)', pointerEvents: 'none', filter: 'blur(38px)' }}
+          animate={{ scale: [1, 1.15, 1], x: [0, 28, 0], y: [0, -18, 0] }} transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }} />
+        <motion.div style={{ position: 'absolute', bottom: '-50px', right: '-60px', width: '420px', height: '420px', borderRadius: '50%', background: 'radial-gradient(circle at 50% 50%, rgba(180,90,20,0.12) 0%, rgba(233,108,51,0.06) 55%, transparent 75%)', pointerEvents: 'none', filter: 'blur(34px)' }}
+          animate={{ scale: [1, 1.2, 1], x: [0, -22, 0] }} transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 2 }} />
+
+        {/* Floating dots */}
+        {[
+          { top: '10%', left: '5%',   size: 8,  color: '#fd0802', dur: 4.0, delay: 0.0 },
+          { top: '75%', left: '8%',   size: 6,  color: '#f5a800', dur: 5.2, delay: 0.7 },
+          { top: '20%', right: '5%',  size: 7,  color: '#fd0802', dur: 4.8, delay: 1.2 },
+          { top: '65%', right: '7%',  size: 9,  color: '#f5a800', dur: 6.0, delay: 0.4 },
+          { top: '45%', left: '3%',   size: 5,  color: '#fd0802', dur: 5.5, delay: 1.5 },
+          { top: '30%', right: '14%', size: 6,  color: '#f5a800', dur: 4.5, delay: 0.9 },
+        ].map((d, i) => (
+          <motion.div key={i}
+            style={{ position: 'absolute', top: d.top, left: (d as any).left, right: (d as any).right, width: d.size, height: d.size, borderRadius: '50%', backgroundColor: d.color, opacity: 0.5, pointerEvents: 'none' }}
+            animate={{ y: [0, -16, 0], opacity: [0.5, 0.85, 0.5], scale: [1, 1.3, 1] }}
+            transition={{ duration: d.dur, repeat: Infinity, ease: 'easeInOut', delay: d.delay }}
+          />
+        ))}
+
+        {/* Pulsing rings */}
+        {[
+          { top: '12%', left: '18%',  size: 44, delay: 0.0 },
+          { top: '62%', right: '4%',  size: 32, delay: 1.2 },
+          { top: '22%', right: '22%', size: 38, delay: 0.6 },
+          { top: '70%', left: '35%',  size: 28, delay: 1.8 },
+        ].map((r, i) => (
+          <motion.div key={i}
+            style={{ position: 'absolute', top: r.top, left: (r as any).left, right: (r as any).right, width: r.size, height: r.size, borderRadius: '50%', border: '2px solid rgba(233,108,51,0.3)', pointerEvents: 'none' }}
+            animate={{ scale: [1, 1.7, 1], opacity: [0.45, 0.08, 0.45] }}
+            transition={{ duration: 4.5 + i * 0.7, repeat: Infinity, ease: 'easeInOut', delay: r.delay }}
+          />
+        ))}
+
+        <div className="max-w-7xl mx-auto px-6 lg:px-16" style={{ position: 'relative', zIndex: 1 }}>
+
+          {/* Header */}
+          <motion.div
+            style={{ textAlign: 'center', marginBottom: '48px' }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: 900, color: '#1a1a1a', lineHeight: 1.1, letterSpacing: '-0.02em', margin: 0 }}>
+              Stack It. Dip It. Devour It.
+            </h2>
+          </motion.div>
+
+          {/* Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6" style={{ marginBottom: '40px' }}>
+            {combos.map((c, i) => (
+              <motion.div
+                key={i}
+                onClick={() => navigate(ROUTES.COMBOS)}
+                style={{ cursor: 'pointer', borderRadius: '20px', overflow: 'hidden', background: 'radial-gradient(circle at 35% 30%, rgba(255,244,214,0.96) 0%, rgba(245,210,140,0.9) 58%, rgba(230,170,78,0.75) 100%)', border: '1px solid rgba(233,108,51,0.2)', boxShadow: '0 10px 32px rgba(100,50,0,0.18), inset 0 1px 0 rgba(255,255,255,0.6)', position: 'relative' }}
+                initial={{ opacity: 0, y: 60, scale: 0.95 }}
+                animate={inView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 60, scale: 0.95 }}
+                transition={{ duration: 0.65, delay: i * 0.15, ease: [0.34, 1.1, 0.64, 1] as [number,number,number,number] }}
+                whileHover={{ y: -8, boxShadow: '0 20px 50px rgba(100,50,0,0.28), inset 0 1px 0 rgba(255,255,255,0.6)', transition: { duration: 0.22 } }}
+              >
+                {/* Tag badge */}
+                <div style={{ position: 'absolute', top: '14px', left: '14px', zIndex: 3, background: c.color, color: '#fff', fontSize: '0.6rem', fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '4px 10px', borderRadius: '50px' }}>
+                  {c.tag}
+                </div>
+
+                {/* Image */}
+                <div style={{ position: 'relative', height: '220px', overflow: 'hidden' }}>
+                  <motion.img
+                    src={c.img} alt={c.name}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    whileHover={{ scale: 1.07, transition: { duration: 0.4 } }}
+                  />
+                  <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 50%, rgba(200,130,40,0.45) 100%)' }} />
+                </div>
+
+                {/* Content */}
+                <div style={{ padding: '18px 20px 22px' }}>
+                  <p style={{ margin: '0 0 3px', fontSize: '0.62rem', fontStyle: 'italic', fontWeight: 600, color: '#9a6520', letterSpacing: '0.08em' }}>- 0{i + 1} · {c.tag}</p>
+                  <p style={{ margin: '0 0 4px', fontSize: '1.18rem', fontWeight: 900, color: '#2c1504', letterSpacing: '-0.01em', lineHeight: 1.1 }}>{c.name}</p>
+                  <p style={{ margin: '0 0 12px', fontSize: '0.82rem', color: '#7a4a10', lineHeight: 1.5 }}>{c.desc}</p>
+                  <div style={{ width: '36px', height: '1.5px', background: `linear-gradient(90deg, ${c.color}, rgba(200,120,32,0))`, borderRadius: '2px', marginBottom: '10px' }} />
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', color: c.color, fontSize: '0.8rem', fontWeight: 700 }}>
+                    View Combo →
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* CTA */}
+          <motion.div
+            style={{ display: 'flex', justifyContent: 'center', paddingBottom: '12px' }}
+            initial={{ opacity: 0, y: 16 }}
+            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+          >
+            <NavLink
+              to={ROUTES.COMBOS}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '13px 32px', borderRadius: '50px', border: '1.5px solid #fd0802', color: '#fd0802', fontWeight: 700, fontSize: '0.88rem', textDecoration: 'none' }}
+            >
+              Explore All Combos →
+            </NavLink>
+          </motion.div>
+
+        </div>
+      </div>
+
+      {/* Wave bottom */}
+      <div style={{ lineHeight: 0, backgroundColor: '#ede0ce' }}>
+        <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block', width: '100%' }}>
+          <path d="M0,40 C180,0 360,80 540,40 C720,0 900,80 1080,40 C1260,0 1380,60 1440,40 L1440,80 L0,80 Z" fill="#ede0ce" />
+        </svg>
+      </div>
+
+    </section>
+  );
+};
+
+/* ══════════════════════════════════════════════
    HOME
 ══════════════════════════════════════════════ */
 const Home = () => {
@@ -113,7 +258,7 @@ const Home = () => {
     <MainLayout>
 
       {/* ══════════════════════════════
-          §1  HERO
+          s1  HERO
       ══════════════════════════════ */}
       <HeroSection />
 
@@ -223,16 +368,17 @@ const Home = () => {
                   animate={burgerInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
                   transition={{ duration: 0.5, delay: 0.2 }}
                 >
-                  Smash Burgers
+                
                 </motion.p>
 
                 <motion.div
-                  style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: 900, color: '#1a1a1a', lineHeight: 1.1, letterSpacing: '-0.02em' }}
+                  style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 900, lineHeight: 1.15, letterSpacing: "-0.02em", display: "flex", flexDirection: "column" }}
                   initial={{ opacity: 0, x: 30 }}
                   animate={burgerInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
                   transition={{ duration: 0.6, delay: 0.4 }}
                 >
-                  Bold. Juicy.<br />Unforgettable.
+                  <span style={{ color: "#2c0f00" }}>Fresh Burgers</span>
+                  <span style={{ color: "#c45000" }}>Full of Flavor</span>
                 </motion.div>
 
                 {/* Burger list */}
@@ -423,7 +569,7 @@ const Home = () => {
                   viewport={{ once: false }}
                   transition={{ duration: 0.5, delay: 0.2 }}
                 >
-                  Premium Drinks
+        
                 </motion.p>
                 <motion.div
                   style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: 900, color: '#1a1a1a', lineHeight: 1.1, letterSpacing: '-0.02em' }}
@@ -614,75 +760,77 @@ const Home = () => {
       </section>
 
       {/* ══════════════════════════════
-          MARQUEE 1
+          §4  COMBOS SECTION
       ══════════════════════════════ */}
-
+      <CombosSection navigate={navigate} />
 
       {/* ══════════════════════════════
-          §4  FINAL CTA (light, orange accent)
+          §5  FINAL CTA (Come Visit Us)
       ══════════════════════════════ */}
-      <section style={{ position: 'relative', overflow: 'hidden', backgroundColor: '#ede0ce' }}>
-        {/* Decorative orange blobs */}
-        <motion.div
-          style={{
-            position: 'absolute', top: '-80px', right: '-80px',
-            width: '400px', height: '400px', borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(233,108,51,0.1) 0%, transparent 70%)',
-            pointerEvents: 'none',
-          }}
-          animate={{ scale: [1, 1.12, 1] }}
-          transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+      <section style={{ position: 'relative', overflow: 'hidden', backgroundColor: '#1a0a00' }}>
+        {/* Background image */}
+        <img
+          src="/background_exp.png"
+          alt=""
+          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0, display: 'block' }}
         />
-        <motion.div
-          style={{
-            position: 'absolute', bottom: '-80px', left: '-80px',
-            width: '360px', height: '360px', borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(233,108,51,0.07) 0%, transparent 70%)',
-            pointerEvents: 'none',
-          }}
-          animate={{ scale: [1, 1.1, 1] }}
-          transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-        />
+        {/* Dark overlay for contrast */}
+        <div style={{ position: 'absolute', inset: 0, background: 'rgba(10,4,0,0.45)', zIndex: 1 }} />
 
-        <div style={{ background: 'linear-gradient(90deg, #fd0802, #e08c00, #fd0802)', padding: '18px 0', borderTop: '1px solid #d97914', borderBottom: '1px solid #d97914' }}>
-          <Marquee />
-        </div>
+        {/* Top blend — fades from combos section colour into this section */}
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '160px', background: 'linear-gradient(to bottom, #ede0ce 0%, rgba(237,224,206,0) 100%)', zIndex: 2, pointerEvents: 'none' }} />
 
         {/* Content */}
         <div
-          className="max-w-7xl mx-auto px-6 lg:px-16"
-          style={{ position: 'relative', zIndex: 1, padding: '84px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '20px' }}
+          style={{ position: 'relative', zIndex: 3, padding: '120px 24px 70px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '16px' }}
         >
-          <motion.p
-            style={{ color: '#fd0802', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.26em', textTransform: 'uppercase', margin: 0 }}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+          {/* Ribbon banner */}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-          >
-            Come Visit Us
-          </motion.p>
-
-          <RevealText
-            text="Experience the Bold Flavors In Person"
+            transition={{ duration: 0.5 }}
             style={{
-              fontSize: 'clamp(2.4rem, 5.5vw, 4.4rem)', fontWeight: 900,
-              color: '#1a1a1a', lineHeight: 1.05, letterSpacing: '-0.03em',
-              maxWidth: '720px', justifyContent: 'center',
+              display: 'inline-block',
+              backgroundColor: '#c01010',
+              padding: '10px 52px',
+              clipPath: 'polygon(24px 0%, calc(100% - 24px) 0%, 100% 50%, calc(100% - 24px) 100%, 24px 100%, 0% 50%)',
+              boxShadow: '0 4px 20px rgba(160,0,0,0.6)',
+            }}
+          >
+            <span style={{
+              color: '#fff', fontSize: '0.72rem', fontWeight: 800,
+              letterSpacing: '0.28em', textTransform: 'uppercase',
+            }}>
+              Come Visit Us
+            </span>
+          </motion.div>
+
+          {/* Heading */}
+          <RevealText
+            text="Experience the Flavors In Person"
+            style={{
+              fontSize: 'clamp(1.8rem, 4vw, 3.2rem)', fontWeight: 900,
+              color: '#1a1a1a', lineHeight: 1.08, letterSpacing: '-0.02em',
+              maxWidth: '700px', justifyContent: 'center',
+              textShadow: '0 2px 12px rgba(255,255,255,0.9), 0 1px 4px rgba(255,255,255,0.8)',
             }}
             delay={0.1}
           />
 
+          {/* Hours / Location */}
           <motion.p
-            style={{ color: '#5f5648', fontSize: '0.95rem', lineHeight: 1.85, maxWidth: '400px', margin: 0, fontWeight: 500 }}
+            style={{ color: '#e0e0e0', fontSize: '0.9rem', lineHeight: 1.9, maxWidth: '400px', margin: 0, fontWeight: 500 }}
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            Mon – Sun · 10 am – 10 pm<br />
-            Chennai, India · +91 98765 43210
+            Mon – Sun • 10 am – 10 pm<br />
+            Chennai, India • +91 98765 43210
           </motion.p>
 
+          {/* Buttons */}
           <motion.div
             className="flex gap-4 flex-wrap justify-center"
             initial={{ opacity: 0, y: 16 }}
@@ -694,28 +842,81 @@ const Home = () => {
               to={ROUTES.CONTACT}
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '8px',
-                padding: '16px 40px', borderRadius: '50px',
-                backgroundColor: '#fd0802', color: '#000',
-                fontWeight: 800, fontSize: '0.9rem', textDecoration: 'none',
-                boxShadow: '0 8px 40px rgba(233,108,51,0.3)',
+                padding: '13px 32px', borderRadius: '50px',
+                backgroundColor: '#fd0802', color: '#fff',
+                fontWeight: 800, fontSize: '0.88rem', textDecoration: 'none',
+                boxShadow: '0 6px 24px rgba(220,0,0,0.45)',
               }}
             >
-              <MapPin size={16} strokeWidth={2.2} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '6px', marginTop: '-2px' }} />
+              <MapPin size={16} strokeWidth={2.2} />
               Find Us
             </NavLink>
             <NavLink
               to={ROUTES.FOOD_AND_DRINKS}
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '8px',
-                padding: '16px 40px', borderRadius: '50px',
-                backgroundColor: 'transparent', color: '#1a1a1a',
-                border: '1.5px solid rgba(26,26,26,0.18)',
-                fontWeight: 600, fontSize: '0.9rem', textDecoration: 'none',
+                padding: '13px 32px', borderRadius: '50px',
+                backgroundColor: 'rgba(255,255,255,0.92)', color: '#1a1a1a',
+                border: '1.5px solid rgba(255,255,255,0.6)',
+                fontWeight: 600, fontSize: '0.88rem', textDecoration: 'none',
               }}
             >
               See Our Menu
             </NavLink>
           </motion.div>
+
+          {/* 4 Feature Cards */}
+          <div
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+            style={{ width: '100%', maxWidth: '1200px', marginTop: '32px' }}
+          >
+            {[
+              { img: '/home/delicious_meals.png', title: 'DELICIOUS MEALS',  desc: 'Tasty dishes cooked to perfection',    color: '#a01010' },
+              { img: '/home/bold_flavors.png',    title: 'BOLD FLAVORS',     desc: "Spices and seasonings you'll love",    color: '#a01010' },
+              { img: '/home/takeAways.png',       title: 'QUICK TAKEAWAYS',  desc: 'Order in advance, grab, and go',       color: '#1a1a3e' },
+              { img: '/home/dining.png',          title: 'COZY DINING',      desc: 'Relax, dine, and enjoy ambiance',      color: '#1a1a3e' },
+            ].map((card, i) => (
+              <motion.div
+                key={i}
+                className="flex flex-row sm:flex-col"
+                style={{
+                  backgroundColor: 'rgba(255,255,255,0.97)',
+                  borderRadius: '16px',
+                  overflow: 'hidden',
+                  boxShadow: '0 6px 24px rgba(0,0,0,0.18)',
+                }}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 + i * 0.08 }}
+                whileHover={{ y: -6, boxShadow: '0 14px 36px rgba(0,0,0,0.26)', transition: { duration: 0.22 } }}
+              >
+                {/* Image — row on mobile, full-width top on sm+ */}
+                <div className="w-2/5 sm:w-full" style={{ flexShrink: 0, minHeight: '110px' }}>
+                  <img
+                    src={card.img}
+                    alt={card.title}
+                    className="sm:h-48"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  />
+                </div>
+
+                {/* Text */}
+                <div
+                  className="sm:text-center sm:items-center"
+                  style={{ padding: '14px', textAlign: 'left', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '5px' }}
+                >
+                  <p style={{ margin: 0, fontWeight: 900, fontSize: '0.78rem', letterSpacing: '0.1em', color: card.color, textTransform: 'uppercase' }}>
+                    {card.title}
+                  </p>
+                  <p style={{ margin: 0, fontSize: '0.75rem', color: '#555', lineHeight: 1.5 }}>
+                    {card.desc}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
         </div>
       </section>
 
